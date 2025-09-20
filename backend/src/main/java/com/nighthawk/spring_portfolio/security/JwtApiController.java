@@ -23,7 +23,10 @@ import com.nighthawk.spring_portfolio.mvc.person.Person;
 import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = {
+        "http://localhost:5174"
+}, allowCredentials = "true")
+
 public class JwtApiController {
 
 	@Autowired

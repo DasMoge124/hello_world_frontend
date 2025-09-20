@@ -18,7 +18,8 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
         <li>
-          <Link to="/login">Login</Link>
+          <Link to="/">Home </Link>
+          <Link to="/login">Login </Link>
         </li>
       </div>
 
