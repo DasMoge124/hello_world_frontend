@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Login() {
+function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -38,7 +38,7 @@ function Login() {
       }
 
       // Cookies are set automatically by the browser if server sets Set-Cookie with HttpOnly
-      alert("Logged in successfully!");
+      alert("Signed up successfully!");
       window.location.href = "/Roommates"; // redirect to home
     } catch (error) {
       console.error("Error during login:", error);
@@ -60,7 +60,7 @@ function Login() {
           textAlign: "center",
         }}
       >
-        <h3>Login</h3>
+        <h3>Sign Up</h3>
         <input
           placeholder="Email"
           value={email}
@@ -104,4 +104,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default SignUp;
