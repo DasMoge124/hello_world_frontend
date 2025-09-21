@@ -5,16 +5,13 @@ function Login() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const deployed = "https://dnhs-chess-backend.onrender.com/";
-  const local = "http://localhost:8085/";
-  const fetchURL = local; // switch to deployed when ready
-
   const handleLogin = async () => {
     setLoading(true);
 
     try {
-      const response = await fetch(fetchURL + "authenticate", {
+      const response = await fetch("http://127.0.0.1:5000/login", {
         method: "POST",
+        mode: "cors",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // REQUIRED for cookies
         body: JSON.stringify({ email, password }),
