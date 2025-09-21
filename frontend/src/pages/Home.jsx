@@ -20,7 +20,7 @@ function Home() {
         {/* Section 1 - Image Left, Text Right */}
         <section className="hero-section">
           <div className="image-placeholder left">
-            <img src="/images/connection.png" alt="Connection" />
+            <img src="/assets/image1.png" alt="Connection" />
           </div>
           <div className="text-content">
             <h2>What is FriendMe?</h2>
@@ -52,7 +52,7 @@ function Home() {
             </p>
           </div>
           <div className="image-placeholder right">
-            <img src="/images/community.png" alt="Community" />
+            <img src="/assets/image2.jpg" alt="Community" />
           </div>
         </section>
 
