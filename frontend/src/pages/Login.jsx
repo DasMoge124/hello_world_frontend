@@ -1,9 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function Login() {
-  const [email, setEmail] = useState("");
+function Login({ setUser }) {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function getUser() {
+      try {
+        await fetch("http://127.0.0.1:5000/user", {
+          method: "GET",
+          mode: "cors",
+          credentials: "include", // REQUIRED for cookies
+        })
+          .then((res) => res.text())
+          .then((text) => {
+            if (text) {
+              setUser(text);
+            }
+          });
+      } catch (err) {
+        console.error("Error fetching user:", err);
+      }
+    }
+
+    if (!loading) {
+      getUser();
+    }
+  }, [loading]);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -14,7 +38,7 @@ function Login() {
         mode: "cors",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // REQUIRED for cookies
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (!response.ok) {
@@ -60,13 +84,19 @@ function Login() {
           textAlign: "center",
         }}
       >
-        <h3>Login</h3>
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+        <h3
           style={{
-            width: "100%",
+            color: "black",
+          }}
+        >
+          Login
+        </h3>
+        <input
+          placeholder="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{
+            width: "90%",
             padding: 10,
             margin: "10px 0",
             borderRadius: 4,
@@ -78,7 +108,7 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           style={{
-            width: "100%",
+            width: "90%",
             padding: 10,
             margin: "10px 0",
             borderRadius: 4,
@@ -94,7 +124,7 @@ function Login() {
             border: "none",
             borderRadius: 4,
             cursor: "pointer",
-            width: "100%",
+            width: "90%",
           }}
         >
           {loading ? "Logging in..." : "Login"}

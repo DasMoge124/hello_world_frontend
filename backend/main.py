@@ -15,12 +15,13 @@ def do_the_login(data):
     print("Login data received:", data)
     return jsonify({"status": "success", "message": "Logged in!"})
     
-#@app.route('/user', methods=['GET', 'POST'])
-#def login():
-#   if request.method == 'POST':
-#       return add_new_user()
-#   else:
-#       return get_user()
+@app.route('/user', methods=['GET', 'POST'])
+def user():
+   if request.method == 'POST':
+       #return add_new_user()
+       return "post user"
+   else:
+       return "get user"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
