@@ -10,9 +10,9 @@ function App() {
     <BrowserRouter>
       <header>
         <div id="navbar">
-          <Link to="/">Home</Link>
+          {/*<Link to="/">Home</Link>
           <Link to="/login">Login</Link>
-          <Link to="/Roommates">Roommates</Link>
+          <Link to="/Roommates">Roommates</Link>*/}
         </div>
       </header>
 
