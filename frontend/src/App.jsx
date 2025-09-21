@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 
 import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
 import Roommates from "./pages/Roommates";
 
@@ -19,6 +20,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/Roommates" element={<Roommates />} />
       </Routes>
     </BrowserRouter>
