@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-// --- Dummy Data Generation Functions ---
-
 // All available sports and interests from the images
 const allSports = [
   "Basketball",
@@ -43,7 +41,7 @@ const getRandomBinaryPreference = () => (Math.random() < 0.5 ? 0 : 1);
 
 // Generates a random set of sports with binary preferences
 const generateRandomSports = () => {
-  const selectedSports = getRandomSubset(allSports, 2, 5); // 2 to 5 random sports
+  const selectedSports = getRandomSubset(allSports, 2, 5);
   const sportsPreferences = {};
   selectedSports.forEach((sport) => {
     sportsPreferences[sport] = getRandomBinaryPreference();
@@ -53,7 +51,7 @@ const generateRandomSports = () => {
 
 // Generates a random set of interests with binary preferences
 const generateRandomInterests = () => {
-  const selectedInterests = getRandomSubset(allInterests, 3, 6); // 3 to 6 random interests
+  const selectedInterests = getRandomSubset(allInterests, 3, 6);
   const interestPreferences = {};
   selectedInterests.forEach((interest) => {
     interestPreferences[interest] = getRandomBinaryPreference();
@@ -87,8 +85,8 @@ const generateDummyRoommate = (id) => {
     name: randomName,
     age: randomAge,
     budget: randomBudget,
-    sports: sports, // structured for filtering
-    interests: interests, // structured for filtering
+    sports: sports,
+    interests: interests,
   };
 };
 
@@ -103,18 +101,19 @@ const generateDummyRoommates = (count) => {
 
 // --- Roommates Component ---
 
-function Roommates() {
+const Roommates = () => {
   const [roommates, setRoommates] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedSports, setSelectedSports] = useState({});
   const [selectedInterests, setSelectedInterests] = useState({});
+  const [connectedRoommates, setConnectedRoommates] = useState(new Set()); // New state to track connections
 
   useEffect(() => {
     // Generate 10 dummy roommates on component mount
     const dummyData = generateDummyRoommates(10);
     setRoommates(dummyData);
 
-    // Initialize selectedSports and selectedInterests to all unchecked
+    // Initialize filter states
     const initialSports = {};
     allSports.forEach((sport) => (initialSports[sport] = false));
     setSelectedSports(initialSports);
@@ -122,13 +121,17 @@ function Roommates() {
     const initialInterests = {};
     allInterests.forEach((interest) => (initialInterests[interest] = false));
     setSelectedInterests(initialInterests);
-
-    // Note: In a real application, you'd fetch from your backend here.
   }, []);
 
   const handleConnect = (roommateId) => {
-    // Dummy connect action
-    console.log(`Connect request sent for roommate ID: ${roommateId}`);
+    // Prevent connecting if already connected
+    if (connectedRoommates.has(roommateId)) {
+      alert("You have already connected with this roommate.");
+      return;
+    }
+
+    // Add roommate ID to the connected set
+    setConnectedRoommates((prev) => new Set(prev).add(roommateId));
     alert("Connection request sent!");
   };
 
@@ -143,12 +146,10 @@ function Roommates() {
   };
 
   const filteredRoommates = roommates.filter((roommate) => {
-    // 1. Filter by search term
     const matchesSearch = roommate.name
       .toLowerCase()
       .includes(search.toLowerCase());
 
-    // 2. Filter by selected sports
     const activeSportsFilters = Object.keys(selectedSports).filter(
       (sport) => selectedSports[sport]
     );
@@ -158,7 +159,6 @@ function Roommates() {
         (filterSport) => roommate.sports[filterSport] === 1
       );
 
-    // 3. Filter by selected interests
     const activeInterestsFilters = Object.keys(selectedInterests).filter(
       (interest) => selectedInterests[interest]
     );
@@ -172,123 +172,194 @@ function Roommates() {
   });
 
   return (
-    <div className="p-6 max-w-2xl mx-auto bg-white shadow-md rounded-lg">
-      <h1 className="text-3xl font-extrabold text-gray-800 mb-6 text-center">
-        Find Your Ideal Roommate
-      </h1>
+    <div className="min-h-screen bg-gray-100 p-6 sm:p-10 font-sans">
+      <div className="max-w-4xl mx-auto">
+        <header className="text-center mb-10">
+          <h1 className="text-4xl font-extrabold text-gray-800">
+            Find Your Ideal Roommate
+          </h1>
+          <p className="mt-2 text-lg text-gray-600">
+            Discover people who share your lifestyle and interests.
+          </p>
+        </header>
 
-      {/* Search bar */}
-      <input
-        type="text"
-        placeholder="Search by name..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full border border-gray-300 p-3 rounded-lg mb-6 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-      />
+        {/* Main Content Area */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Sidebar for Filters */}
+          <aside className="md:col-span-1 bg-white p-6 rounded-xl shadow-lg h-fit sticky top-10">
+            <h2 className="text-2xl font-bold text-gray-800 mb-5">Filters</h2>
 
-      {/* Filters Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {/* Sports Filter */}
-        <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
-          <h2 className="text-xl font-semibold mb-3 text-gray-700">
-            Filter by Sports
-          </h2>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            {allSports.map((sport) => (
+            {/* Search bar */}
+            <div className="mb-6">
               <label
-                key={sport}
-                className="flex items-center space-x-2 cursor-pointer"
+                htmlFor="search"
+                className="block text-sm font-medium text-gray-700 mb-1"
               >
-                <input
-                  type="checkbox"
-                  name={sport}
-                  checked={selectedSports[sport]}
-                  onChange={handleSportChange}
-                  className="form-checkbox h-4 w-4 text-indigo-600 rounded"
-                />
-                <span>{sport}</span>
+                Search by Name
               </label>
-            ))}
-          </div>
-        </div>
+              <input
+                id="search"
+                type="text"
+                placeholder="e.g. Alice"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full border-gray-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors duration-200"
+              />
+            </div>
 
-        {/* Interests Filter */}
-        <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
-          <h2 className="text-xl font-semibold mb-3 text-gray-700">
-            Filter by Interests
-          </h2>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            {allInterests.map((interest) => (
-              <label
-                key={interest}
-                className="flex items-center space-x-2 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  name={interest}
-                  checked={selectedInterests[interest]}
-                  onChange={handleInterestChange}
-                  className="form-checkbox h-4 w-4 text-indigo-600 rounded"
-                />
-                <span>{interest}</span>
-              </label>
-            ))}
-          </div>
+            {/* Sports Filter */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                Sports
+              </h3>
+              <div className="space-y-2">
+                {allSports.map((sport) => (
+                  <label
+                    key={sport}
+                    className="flex items-center text-sm cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors duration-150"
+                  >
+                    <input
+                      type="checkbox"
+                      name={sport}
+                      checked={selectedSports[sport]}
+                      onChange={handleSportChange}
+                      className="form-checkbox h-4 w-4 text-indigo-600 rounded"
+                    />
+                    <span className="ml-2 text-gray-800">{sport}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            {/* Interests Filter */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-3">
+                Interests
+              </h3>
+              <div className="space-y-2">
+                {allInterests.map((interest) => (
+                  <label
+                    key={interest}
+                    className="flex items-center text-sm cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors duration-150"
+                  >
+                    <input
+                      type="checkbox"
+                      name={interest}
+                      checked={selectedInterests[interest]}
+                      onChange={handleInterestChange}
+                      className="form-checkbox h-4 w-4 text-indigo-600 rounded"
+                    />
+                    <span className="ml-2 text-gray-800">{interest}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          </aside>
+
+          {/* Roommate List */}
+          <main className="md:col-span-2">
+            {filteredRoommates.length > 0 ? (
+              <ul className="space-y-6">
+                {filteredRoommates.map((roommate) => {
+                  const isConnected = connectedRoommates.has(roommate.id);
+                  return (
+                    <li
+                      key={roommate.id}
+                      className={`relative bg-white p-6 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform ${
+                        isConnected
+                          ? "ring-2 ring-green-500 scale-100"
+                          : "hover:scale-[1.01] hover:shadow-xl"
+                      }`}
+                    >
+                      {isConnected && (
+                        <div className="absolute top-3 right-3 text-green-600 font-bold text-xs bg-green-100 px-2 py-1 rounded-full">
+                          Connected
+                        </div>
+                      )}
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <div>
+                          <h2 className="text-2xl font-bold text-gray-900">
+                            {roommate.name}
+                          </h2>
+                          <p className="text-md text-gray-600 mt-1">
+                            Age: {roommate.age} · Budget: ${roommate.budget}
+                            /month
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => handleConnect(roommate.id)}
+                          disabled={isConnected}
+                          className={`mt-4 sm:mt-0 py-2 px-5 rounded-lg font-semibold shadow-md transition-all duration-200
+                          ${
+                            isConnected
+                              ? "bg-green-600 text-white cursor-not-allowed"
+                              : "bg-indigo-600 text-white hover:bg-indigo-700"
+                          }`}
+                        >
+                          {isConnected ? "Connected" : "Connect"}
+                        </button>
+                      </div>
+
+                      <div className="mt-5 space-y-4">
+                        <div>
+                          <p className="font-semibold text-gray-800 mb-2">
+                            Sports You'd Share:
+                          </p>
+                          <div className="flex flex-wrap gap-2 text-sm">
+                            {Object.entries(roommate.sports).map(
+                              ([sport, pref]) => (
+                                <span
+                                  key={sport}
+                                  className={`px-3 py-1 rounded-full font-medium ${
+                                    pref === 1
+                                      ? "bg-blue-100 text-blue-800"
+                                      : "bg-gray-200 text-gray-700"
+                                  }`}
+                                >
+                                  {sport} {pref === 1 ? "👍" : "👌"}
+                                </span>
+                              )
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="font-semibold text-gray-800 mb-2">
+                            Interests in Common:
+                          </p>
+                          <div className="flex flex-wrap gap-2 text-sm">
+                            {Object.entries(roommate.interests).map(
+                              ([interest, pref]) => (
+                                <span
+                                  key={interest}
+                                  className={`px-3 py-1 rounded-full font-medium ${
+                                    pref === 1
+                                      ? "bg-pink-100 text-pink-800"
+                                      : "bg-gray-200 text-gray-700"
+                                  }`}
+                                >
+                                  {interest} {pref === 1 ? "✨" : "✔️"}
+                                </span>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p className="text-center text-gray-500 text-lg mt-20">
+                No roommates found matching your criteria. Try adjusting your
+                filters!
+              </p>
+            )}
+          </main>
         </div>
       </div>
-
-      {/* Roommate list */}
-      {filteredRoommates.length > 0 ? (
-        <ul className="space-y-4">
-          {filteredRoommates.map((roommate) => (
-            <li
-              key={roommate.id}
-              className="p-5 border border-gray-200 rounded-lg shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white hover:shadow-md transition-shadow duration-200"
-            >
-              <div className="flex-grow mb-3 sm:mb-0">
-                <h2 className="font-bold text-xl text-gray-900">
-                  {roommate.name}
-                </h2>
-                <p className="text-md text-gray-600">
-                  Age: {roommate.age} · Budget: ${roommate.budget}/month
-                </p>
-                <div className="text-sm text-gray-700 mt-2">
-                  <p className="font-medium">Sports:</p>
-                  <ul className="list-disc list-inside ml-2">
-                    {Object.entries(roommate.sports).map(([sport, pref]) => (
-                      <li key={sport}>
-                        {sport} ({pref === 1 ? "Prefers" : "Okay"})
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="font-medium mt-1">Interests:</p>
-                  <ul className="list-disc list-inside ml-2">
-                    {Object.entries(roommate.interests).map(
-                      ([interest, pref]) => (
-                        <li key={interest}>
-                          {interest} ({pref === 1 ? "Prefers" : "Okay"})
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              </div>
-              <button
-                onClick={() => handleConnect(roommate.id)}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors duration-200 self-end sm:self-center"
-              >
-                Connect
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-center text-gray-500 text-lg mt-10">
-          No roommates found matching your criteria. Try adjusting your filters!
-        </p>
-      )}
     </div>
   );
-}
+};
 
 export default Roommates;
