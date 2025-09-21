@@ -1,24 +1,29 @@
 // frontend/src/pages/Home.jsx
 import React from 'react';
-import { Link } from 'react-router-dom'; // Assuming you'll use react-router-dom for navigation
-import '../App.css'; // Import the main CSS file for styling
+import { Link } from 'react-router-dom';
+import '../App.css';
 
 function Home() {
   return (
     <div className="home-container">
       {/* Header Section */}
       <header className="home-header">
+        <h1 className="logo">FriendMe</h1>
         <nav className="header-nav">
           <Link to="/login" className="nav-button">Login</Link>
           <Link to="/signup" className="nav-button primary">Sign Up</Link>
         </nav>
       </header>
 
-      {/* Main Content Sections */}
+      {/* Main Content */}
       <main className="home-main-content">
+        {/* Section 1 - Image Left, Text Right */}
         <section className="hero-section">
+          <div className="image-placeholder left">
+            <img src="/images/connection.png" alt="Connection" />
+          </div>
           <div className="text-content">
-            <h1>What is FriendMe?</h1>
+            <h2>What is FriendMe?</h2>
             <p>
               FriendMe is your new social hub designed to connect you with like-minded individuals.
               Discover new friends, groups, and activities that match your passions and interests.
@@ -26,24 +31,17 @@ function Home() {
               to share experiences with, FriendMe makes it easy and fun.
             </p>
           </div>
-          <div className="image-placeholder">
-            {/* Placeholder for an image related to "What is FriendMe?" */}
-            <p>Visual for Connection</p>
-          </div>
         </section>
 
+        {/* Section 2 - Text Left, Image Right */}
         <section className="features-section">
-          <div className="image-placeholder">
-            {/* Placeholder for an image related to benefits/founders */}
-            <p>Visual for Community/Team</p>
-          </div>
           <div className="text-content">
             <h2>Why do you need FriendMe?</h2>
             <ul>
-              <li>*Find Your Tribe:* Easily connect with people who share your hobbies and goals.</li>
-              <li>*Expand Your Network:* Meet new friends beyond your immediate circles.</li>
-              <li>*Discover Events:* Get involved in local activities and groups tailored to you.</li>
-              <li>*Build Stronger Bonds:* Foster meaningful relationships with ease.</li>
+              <li><strong>Find Your Tribe:</strong> Easily connect with people who share your hobbies and goals.</li>
+              <li><strong>Expand Your Network:</strong> Meet new friends beyond your immediate circles.</li>
+              <li><strong>Discover Events:</strong> Get involved in local activities and groups tailored to you.</li>
+              <li><strong>Build Stronger Bonds:</strong> Foster meaningful relationships with ease.</li>
             </ul>
 
             <h2>About the Founders</h2>
@@ -53,8 +51,12 @@ function Home() {
               and help everyone find their community.
             </p>
           </div>
+          <div className="image-placeholder right">
+            <img src="/images/community.png" alt="Community" />
+          </div>
         </section>
 
+        {/* CTA Section */}
         <section className="cta-section">
           <h2>Ready to connect?</h2>
           <Link to="/login" className="nav-button primary large-button">Start Now!</Link>
@@ -62,9 +64,9 @@ function Home() {
         </section>
       </main>
 
-      {/* Optional: Footer */}
+      {/* Footer */}
       <footer className="home-footer">
-        <p>&copy; 2023 FriendMe. All rights reserved.</p>
+        <p>&copy; 2025 FriendMe. All rights reserved.</p>
       </footer>
     </div>
   );
