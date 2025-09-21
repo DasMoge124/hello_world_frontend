@@ -13,7 +13,7 @@ function Login() {
     setLoading(true);
 
     try {
-      const response = await fetch(fetchURL + "/authenticate", {
+      const response = await fetch(fetchURL + "authenticate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include", // REQUIRED for cookies
