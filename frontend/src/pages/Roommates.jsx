@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-// All available sports and interests from the images
+// All available sports and interests
 const allSports = [
   "Basketball",
   "Athletics",
@@ -75,7 +75,6 @@ const generateDummyRoommate = (id) => {
   ];
   const randomName = names[Math.floor(Math.random() * names.length)];
   const randomAge = Math.floor(Math.random() * (30 - 18 + 1)) + 18;
-  const randomBudget = Math.floor(Math.random() * (1200 - 500 + 1)) + 500;
 
   const sports = generateRandomSports();
   const interests = generateRandomInterests();
@@ -84,7 +83,6 @@ const generateDummyRoommate = (id) => {
     id: id,
     name: randomName,
     age: randomAge,
-    budget: randomBudget,
     sports: sports,
     interests: interests,
   };
@@ -100,20 +98,17 @@ const generateDummyRoommates = (count) => {
 };
 
 // --- Roommates Component ---
-
 const Roommates = () => {
   const [roommates, setRoommates] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedSports, setSelectedSports] = useState({});
   const [selectedInterests, setSelectedInterests] = useState({});
-  const [connectedRoommates, setConnectedRoommates] = useState(new Set()); // New state to track connections
+  const [connectedRoommates, setConnectedRoommates] = useState(new Set());
 
   useEffect(() => {
-    // Generate 10 dummy roommates on component mount
     const dummyData = generateDummyRoommates(10);
     setRoommates(dummyData);
 
-    // Initialize filter states
     const initialSports = {};
     allSports.forEach((sport) => (initialSports[sport] = false));
     setSelectedSports(initialSports);
@@ -124,13 +119,10 @@ const Roommates = () => {
   }, []);
 
   const handleConnect = (roommateId) => {
-    // Prevent connecting if already connected
     if (connectedRoommates.has(roommateId)) {
       alert("You have already connected with this roommate.");
       return;
     }
-
-    // Add roommate ID to the connected set
     setConnectedRoommates((prev) => new Set(prev).add(roommateId));
     alert("Connection request sent!");
   };
@@ -183,13 +175,11 @@ const Roommates = () => {
           </p>
         </header>
 
-        {/* Main Content Area */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Sidebar for Filters */}
+          {/* Sidebar Filters */}
           <aside className="md:col-span-1 bg-white p-6 rounded-xl shadow-lg h-fit sticky top-10">
             <h2 className="text-2xl font-bold text-gray-800 mb-5">Filters</h2>
 
-            {/* Search bar */}
             <div className="mb-6">
               <label
                 htmlFor="search"
@@ -207,7 +197,6 @@ const Roommates = () => {
               />
             </div>
 
-            {/* Sports Filter */}
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-700 mb-3">
                 Sports
@@ -231,7 +220,6 @@ const Roommates = () => {
               </div>
             </div>
 
-            {/* Interests Filter */}
             <div>
               <h3 className="text-lg font-semibold text-gray-700 mb-3">
                 Interests
@@ -282,8 +270,7 @@ const Roommates = () => {
                             {roommate.name}
                           </h2>
                           <p className="text-md text-gray-600 mt-1">
-                            Age: {roommate.age} · Budget: ${roommate.budget}
-                            /month
+                            Age: {roommate.age}
                           </p>
                         </div>
                         <button
