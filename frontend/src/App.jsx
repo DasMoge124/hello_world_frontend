@@ -3,6 +3,7 @@ import "./App.css";
 
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Roommates from "./pages/Roommates";
 
 function App() {
   return (
@@ -11,14 +12,14 @@ function App() {
         <div id="navbar">
           <Link to="/">Home</Link>
           <Link to="/login">Login</Link>
-          {/* <Link to="/Roommates">Login</Link> */}
+          <Link to="/Roommates">Roommates</Link>
         </div>
       </header>
 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        {/* <Route path="/Roommates" element={<Roommates />} /> */}
+        <Route path="/Roommates" element={<Roommates />} />
       </Routes>
     </BrowserRouter>
   );

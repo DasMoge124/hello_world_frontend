@@ -20,9 +20,12 @@ function Roommates() {
 
   const handleConnect = async (roommateId) => {
     try {
-      const res = await fetch(`http://localhost:8085/api/roommates/${roommateId}/connect`, {
-        method: "POST",
-      });
+      const res = await fetch(
+        `http://localhost:8085/api/roommates/${roommateId}/connect`,
+        {
+          method: "POST",
+        }
+      );
       if (res.ok) {
         alert("Connection request sent!");
       } else {
