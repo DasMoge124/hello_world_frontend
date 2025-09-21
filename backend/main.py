@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 # from auth import do_the_login, show_the_login_form
 from flask_cors import CORS, cross_origin  # <- import CORS
-from data.py import create_table
+from data import create_table
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)  # <- enable CORS with credentials support
