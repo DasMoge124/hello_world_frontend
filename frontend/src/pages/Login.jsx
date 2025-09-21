@@ -8,17 +8,15 @@ function Login() {
   const handleLogin = async () => {
     setLoading(true);
 
-    const deployed = "https://dnhs-chess-backend.onrender.com/";
-    const local = "http://localhost:8085/";
-    const fetchURL = local; // switch to deployed when ready
-
     try {
-      const response = await fetch(fetchURL + "authenticate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include", // REQUIRED for cookies
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch("/authenticate",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include", // REQUIRED for cookies
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       if (!response.ok) {
         switch (response.status) {
